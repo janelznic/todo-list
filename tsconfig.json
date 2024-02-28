@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "outDir": "./js"
+  },
+  "include": ["src/"],
+  "exclude": ["./js", "node_modules"]
+}

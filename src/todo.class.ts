@@ -1,17 +1,21 @@
-import { Task } from 'task.interface';
+import { Task } from './task.interface';
 
-class TodoList {
+export class TodoList {
   private tasks: Task[] = [];
+
+  constructor(tasks: Task[]) {
+    this.tasks = tasks;
+  }
 
   addTask(task: Task) {
     this.tasks.push(task);
   }
 
   removeTaskById(id: number) {
-    this.tasks = this.tasks.filter((todo) => todo.id !== id);
+    this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 
-  getTask(): Task[] {
+  getTasks(): Task[] {
     return this.tasks;
   }
 }
