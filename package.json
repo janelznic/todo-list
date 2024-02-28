@@ -4,6 +4,7 @@
   "description": "Simple To Do list using TypeScript",
   "main": "index.js",
   "scripts": {
+    "build": "tsc src/todo.class.ts src/task.interface.ts --outFile js/all.js --module amd",
     "dev": "npm start",
     "start": "http-server ./ -a 0.0.0.0 -p 4000",
     "test": "echo \"Error: no test specified\" && exit 1"
