@@ -1,0 +1,175 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: getHello
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /users:
+    post:
+      operationId: create
+      summary: Create a user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - users
+    get:
+      operationId: findAll
+      summary: List all users
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - users
+  /users/id/{id}:
+    get:
+      operationId: findById
+      summary: Get user by Id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - users
+  /users/{username}:
+    get:
+      operationId: findByUsername
+      summary: Get user by username
+      parameters:
+        - name: username
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - users
+  /users/{id}:
+    patch:
+      operationId: update
+      summary: Update user by Id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - users
+    delete:
+      operationId: remove
+      summary: Delete user by Id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - users
+  /users/login:
+    post:
+      operationId: login
+      summary: Login user by email and password
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - users
+  /version:
+    get:
+      operationId: getVersionInfo
+      parameters: []
+      responses:
+        '200':
+          description: ''
+info:
+  title: easyadmin-core API
+  description: 'README: https://github.com/easyadmin-system/easyadmin-core'
+  version: '4.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john.doe@gmail.com
+        password:
+          type: string
+          example: aaa
+        username:
+          type: string
+          example: admin
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+      required:
+        - email
+        - password
+        - username
+        - firstName
+        - lastName
+    UpdateUserDto:
+      type: object
+      properties: {}
+    LoginUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john.doe@gmail.com
+        password:
+          type: string
+          example: aaa
+      required:
+        - email
+        - password
