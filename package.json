@@ -1,0 +1,31 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "Simple To Do list using TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm start",
+    "start": "http-server ./ -a 0.0.0.0 -p 4000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/janelznic/todo-list.git"
+  },
+  "keywords": [
+    "todo",
+    "list",
+    "simple",
+    "typescript"
+  ],
+  "author": "Jan Elznic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/janelznic/todo-list/issues"
+  },
+  "homepage": "https://github.com/janelznic/todo-list#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "typescript": "^5.3.3"
+  }
+}
