@@ -41,6 +41,12 @@ Simple To Do list based in TypeScript - Frontend
    `npm install` or `npm i`
 
 
+4. Make build:
+
+   `npm run build`
+
+
+
 ### NPM Scripts
 - `build` - Transpile TypeScript and build the application
 - `dev` - Run the development server in watch mode with transpilation
