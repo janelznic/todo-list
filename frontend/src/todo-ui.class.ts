@@ -1,13 +1,18 @@
 import { Task } from './task.interface';
 import { TodoList } from './todo.class';
 
+enum EditMode { Add, Edit };
+
 export class TodoListUI {
-  private todoList: TodoList;
+  private todoListObj: TodoList;
   private editableTask: Task;
   private elm: { addForm, addItemField, addButton, editForm, editItemField, saveButton, cancelButton, todoList };
+  private editMode: EditMode;
 
   constructor(todoList: TodoList) {
-    this.todoList = todoList;
+    this.todoListObj = todoList;
+
+    this.editMode = EditMode.Add;
 
     this.elm = {
       todoList: document.getElementById('todoList')!,
@@ -46,10 +51,12 @@ export class TodoListUI {
     window.addEventListener('load', () => {
       this.buildDOM();
     });
+
+    window.addEventListener('keydown', (event) => this.keyDownHandler(event));
   }
 
   async buildDOM() {
-    const tasks = await this.todoList.getTasks();
+    const tasks = await this.todoListObj.getTasks();
     this.elm.todoList.innerHTML = '';
     tasks.forEach((todo, index) => {
       const newTaskElm = document.createElement('li');
@@ -75,32 +82,32 @@ export class TodoListUI {
         completed: false,
       };
 
-      this.todoList.addTask(newTodo);
+      this.todoListObj.addTask(newTodo);
       this.buildDOM();
       this.elm.addItemField.value = '';
     }
   }
 
   async removeTaskById(id: number) {
-    await this.todoList.removeTaskById(id);
+    await this.todoListObj.removeTaskById(id);
     this.buildDOM();
   }
 
   async checkTaskById(id: number) {
-    let task = await this.todoList.getTaskById(id);
+    let task = await this.todoListObj.getTaskById(id);
     task.completed = !task.completed;
-    await this.todoList.updateTaskById(id, task);
+    await this.todoListObj.updateTaskById(id, task);
     this.buildDOM();
   }
 
   async updateTaskById(id: number) {
-    this.editableTask = await this.todoList.getTaskById(id);
+    this.editableTask = await this.todoListObj.getTaskById(id);
     this.elm.editItemField.value = this.editableTask.text;
     this.switchToEditForm();
   }
 
   async saveTask() {
-    await this.todoList.updateTaskById(this.editableTask.id, {
+    await this.todoListObj.updateTaskById(this.editableTask.id, {
       text: this.elm.editItemField.value,
       completed: this.editableTask.completed
     });
@@ -108,12 +115,26 @@ export class TodoListUI {
     this.swhitchToAddForm();
   }
 
+  keyDownHandler(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      if (this.editMode === EditMode.Add && this.elm.addItemField !== '') {
+        this.addTask();
+      } else if (this.editMode === EditMode.Edit && this.elm.editItemField !== '') {
+        this.saveTask();
+      }
+    }
+  }
+
   switchToEditForm() {
+    this.editMode = EditMode.Edit;
+
     this.elm.addForm.style.display = 'none';
     this.elm.editForm.style.display = 'block';
   }
 
   swhitchToAddForm() {
+    this.editMode = EditMode.Add;
+
     this.editableTask = null;
     this.elm.editItemField.value = '';
     this.elm.addForm.style.display = 'block';
