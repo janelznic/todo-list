@@ -9,8 +9,17 @@
     <h1>To Do list</h1>
 
     <div class="container">
-      <input type="text" placeholder="Add new item&hellip;" id="addItemField" class="new-item">
-      <button id="addButton" class="add-button">Add</button>
+      <div id="addForm">
+        <input type="text" placeholder="Add new item&hellip;" maxlength="255" id="addItemField" class="new-item">
+        <button id="addButton" class="add-button">Add</button>
+      </div>
+
+      <div id="editForm" class="nodisplay">
+        <input type="text" placeholder="" value="" maxlength="255" id="editItemField" class="new-item">
+        <button id="saveButton" class="save-button">Save</button>
+        <button id="cancelButton" class="cancel-button">X</button>
+      </div>
+
       <div class="cleaner"></div>
       <ul id="todoList" class="todo-list"></ul>
     </div>
@@ -18,11 +27,9 @@
     <script type="module">
       import { TodoList } from '/js/todo.class.js';
       import { TodoListUI } from '/js/todo-ui.class.js';
-      const todoList = new TodoList([
-        { id: 1, text: 'Hello world', completed: false },
-        { id: 2, text: 'Bla bla', completed: true },
-        { id: 3, text: 'Hey', completed: false },
-      ]);
+
+      /* Proxy set up in package.json to avoid CORS */
+      const todoList = new TodoList('http://localhost:4200/api');
       const todoListUi = new TodoListUI(todoList);
     </script>
 
