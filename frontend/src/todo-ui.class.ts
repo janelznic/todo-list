@@ -73,16 +73,16 @@ export class TodoListUI {
     });
   }
 
-  addTask() {
+  async addTask() {
     const text = this.elm.addItemField.value.trim();
 
     if (text) {
-      const newTodo: Task = {
+      const task: Task = {
         text: text,
         completed: false,
       };
 
-      this.todoListObj.addTask(newTodo);
+      await this.todoListObj.addTask(task);
       this.buildDOM();
       this.elm.addItemField.value = '';
     }
