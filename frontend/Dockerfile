@@ -3,7 +3,7 @@ WORKDIR /srv/app
 COPY package*.json ./
 
 RUN npm install --verbose
-RUN npm install -g @angular/cli@16.2.9
+RUN npm install -g http-server
 COPY . .
 RUN npm run build
 
