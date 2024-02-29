@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+      target: ${ENV}
+    container_name: frontend
+    command: npm run start
+    volumes:
+      - ./frontend:/srv/app
+      - /srv/app/node_modules
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+      target: ${ENV}
+    container_name: api
+    volumes:
+      - ./backend:/srv/app
+      - /srv/app/node_modules
+      - /srv/app/dist
+    command: npm run start:prod
+    depends_on:
+      - mysql
+    environment:
+      ENV: ${ENV}
+      DB_DIALECT: ${DB_DIALECT}
+      DB_HOST: ${DB_HOST}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3000:3000"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    networks:
+      - default
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    expose:
+      - "${DB_PORT}"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  mysql_init:
+    image: mysql:8.0
+    container_name: mysql_init
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PORT: ${DB_PORT}
+    entrypoint: [ "bash", "-c", "sleep 10 && mysql -u root -p${DB_ROOT_PASSWORD} --host=mysql --port=${DB_PORT} < /temp/init.sql && exit"] 
+    depends_on:
+      - mysql
+    volumes:
+      - ./data/db/mysql/init.sql:/temp/init.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+volumes:
+  dbdata:
